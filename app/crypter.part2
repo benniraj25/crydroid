@@ -1,0 +1,20 @@
+File readme = new File("/"+path1+"/readme_now.txt");
+FileUtils.writeStringToFile(readme, tofile);
+     System.out.println(f);
+    }
+}
+
+
+}
+
+
+public static void FileEncryption(String path1) throws Exception  {
+
+             FileInputStream inFile = new FileInputStream(path1);
+
+		// encrypted file
+		FileOutputStream outFile = new FileOutputStream(path1+".enc");
+
+
+		// password to encrypt the file
+

