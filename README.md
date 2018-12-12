@@ -7,7 +7,7 @@ Android Crypter/Decrypter App Generator
 
 
 ### Features:
-#### Encryption extensions: txt, png, bmp, jpg, mp3, mp4, mpeg, doc, docx, etc (edit app/crypter.part2 to add more)  
+#### Encryption extensions: txt, png, bmp, jpg, mp3, mp4, mpeg, doc, docx, etc (edit app/crypter.part3 to add more)  
 #### Encrypter/Decrypter using Custom Password
 #### Payload Server, Obfuscated URL by Tinyurl
 #### Fully Undetectable
